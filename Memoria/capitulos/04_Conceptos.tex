@@ -1,0 +1,299 @@
+\chapter{Bases de Gröbner.}
+\section{Definiciones y Lemas Importantes.}
+Antes de entrar de lleno en la Bases de Gröbner definamos algunos conceptos necesarios.
+
+\textbf{Definición 1.} Un monomio en $x_{1},..., x_{n}$ es un producto de la forma
+$$x_{1}^{\alpha_{1}} \cdot x_{2}^{\alpha_{2}} \dots x_{n}^{\alpha_{n}},$$
+donde todos los exponentes $\alpha_{1},...,\alpha_{n}$ son enteros no negativos. El grado total de este monomio es la suma $\alpha_{1}+...+\alpha_{n}$.
+
+\textbf{Definición 2.} Un polinomio f en $x_{1},..., x_{n}$ con coeficientes en un campo $k$ es una combinación lineal finita(con coeficientes en k) de monomios. Escribiremos un polinomio f de la forma
+$$ f = \sum_{\alpha} a_{\alpha}x^{\alpha}, a_{\alpha}\in k$$
+donde la suma es sobre un número finito de n-tuplas $\alpha = (\alpha_{1},...,\alpha_{n})$. El conjunto de todos los polinomios en $x_{1},...,x_{n}$ con coeficientes en k se denota $k[x_{1},...,x_{n}]$.
+
+\textbf{Definición 3.} Sea $f = \sum_{\alpha} a_{\alpha}x^{\alpha}$ un polinomio en $k[x_{1},...,x_{n}]$.
+\begin{enumerate}
+	\item [(i)]  Llamamos $a_{\alpha}$ al coeficiente del monomio $x^{\alpha}$.
+	\item [(ii)]  Si $a_{\alpha} \neq 0 $, entonces decimos que $a_{\alpha}x^{\alpha}$ es un término de $f$.
+	\item [(iii)] El grado total de $f \neq 0$, denotado deg($f$), es el máximo $|\alpha|$ tal que el coeficiente $a_{\alpha}$ es distinto de cero. El grado total del polinomio cero es indefinido.
+\end{enumerate}
+
+\textbf{Definición 4.} Dado un campo $k$ y un número entero positivo $n$, se define el espacio afín de dimensión $n$ sobre $k$ como el conjunto
+$$k^{n}={(a_{1},...,a_{n}) | a_{1},...,a_{n} \in k }.$$
+
+\textbf{Definición 5.} Sea $k$ un campo, y sean $f_{1},...,f_{n}$ polinomios en $k[x_{1},...,x_{n}]$. Entonces
+$$V(f_{1},...,f_{s})={(a_{1},...,a_{n}) \in k^{n}|f_{i}(a_{1},...,a_{n}) = 0 \forall 1 \leq i \leq s}.$$
+Llamamos $V(f_{1},...,f_{s})$ a la variedad afín definida por $f_{1},...,f_{s}$.
+
+\textbf{Definición 6.} Un subconjunto $I \subseteq k[x_{1},...,x_{n}]$ es un ideal si satisface:
+\begin{enumerate}
+	\item [(i)]  $0 \in I.$
+	\item [(ii)] Si $f,g \in I$, entonces $f + g \in I.$
+	\item [(iii)] Si $f \in I$ y $h \in k[x_{1},...,x_{n}]$, entonces $hf \in I$.
+\end{enumerate}
+
+\textbf{Definición 7.} Sean $f_{1},...,f_{s}$ polinomios en $k[x_{1},...,x_{n}]$. Entonces
+
+\[
+\langle f_{1},...,f_{s}\rangle = \left\lbrace \sum_{i=1}^{s}h_{i}f_{i} \mid h_{1},...,h_{s} \in k[x_{1},...,x_{n}]\right\rbrace .
+\]
+El hecho crucial es que $\langle f_{1},...,f_{s}\rangle$ es un ideal.
+
+\textbf{Lema 1.} Si $f_{1},...,f_{s} \in k[x_{1},...,x_{n}]$, entonces $\langle f_{1},...,f_{s}\rangle$ es un ideal de $k[x_{1},...,x_{n}]$.
+Llamaremos a $\langle f_{1},...,f_{s}\rangle$ el ideal generado por $f_{1},...,f_{s}$.
+
+\textbf{Proposición 1.} Si $f_{1},...,f_{s} and g_{1},...,g_{s}$ son bases del mismo ideal en $k[x_{1},...,x_{n}]$, tal que $\langle f_{1},...,f_{s}\rangle = \langle g_{1},...,g_{t}\rangle$, entonces tenemos que $V(f_{1},...,f_{s}) = V(g_{1},...,g_{t})$.
+
+\textbf{Definición 8.} Sea $V \subseteq k^{n}$ una variedad afín. Entonces
+\[
+I(V) = {f \in k[x_{1},...,x_{n}] \mid f(a_{1},...,a_{n}) = 0 \forall (a_{1},...,a_{n}) \in V}.
+\]
+La observación crucial es que $I(V)$ es un ideal.
+
+\textbf{Lema 2.} Si $V \subseteq k^{n}$ es una variedad afín, entonces $I(V) \subseteq k[x_{1},...,x_{n}]$ es un ideal. Llamaremos a $I(V)$ el ideal de $V$.
+
+\section{Ordenamiento de monomios en $k[x_{1},...,x_{n}]$}
+
+Si examinamos el algoritmo de la división en $k[x]$ y el algoritmo de reducción por filas (eliminación de Gauss-Jordan) para los sistemas de ecuaciones lineales (o matrices) en detalle, vemos que la noción de orden de los términos en los polinomios es un ingrediente clave de ambos. 
+
+En esta sección, discutiremos las propiedades deseables que un ordenamiento debe tener y veremos unos ejemplos que satisfacen dichas propiedades.
+
+\textbf{Definición 1.} Un orden monomial $>$ en $k[x_{1},..., x _{n}]$ es una relación $>$ en $\mathbb{Z}^{n}_{\geq0}$, o equivalentemente, una relación en el conjunto de monomios $x^{\alpha}, \alpha \in  \mathbb{Z}^{n}_{\geq0}$, cumpliendo:
+\begin{enumerate}
+	\item [(i)] $>$ es un orden total(o lineal) en $\mathbb{Z}^{n}_{\geq0}$.
+	\item [(ii)] Si $\alpha > \beta$ y $\gamma \in \mathbb{Z}^{n}_{\geq0}$, entonces $\alpha + \gamma > \beta + \gamma$.
+	\item [(iii)] $>$ es un buen orden en $\mathbb{Z}^{n}_{\geq0}$. Esto significa que cada subconjunto no vacío de $\mathbb{Z}^{n}_{\geq0}$ tiene un elemento más pequeño bajo $>$. En otras palabras, si $A \subseteq \mathbb{Z}^{n}_{\geq0}$ es no vacío, entonces existe $\alpha \in A$ tal que $\beta > \alpha$ para cada $\beta \neq \alpha$ en $A$.
+\end{enumerate}
+
+Dado un orden monomial $>$, se dice que $\alpha \geq \beta$ cuando $\alpha > \beta$ o $\alpha = \beta$.
+
+\textbf{Definición 2. (Orden lexicográfico)}. Sea $\alpha = (\alpha_{1},...,\alpha_{n})$ y $\beta = (\beta_{1},...,\beta_{n})$ pertenecientes a $\mathbb{Z}^{n}_{\geq0}$. Decimos $\alpha >_{lex} \beta$ si el elemento no nulo más a la izquierda del vector diferencia $\alpha - \beta \in \mathbb{Z}^{n}$ es positivo. Escribiremos $x^{\alpha}>_{lex}x^{\beta}$ si $\alpha >_{lex} \beta$.
+
+En la práctica, cuando trabajamos con polinomios en dos o tres variables, llamaremos a las variables $x, y, z$ en lugar de $x_{1}, x_{2}, x_{3}$. También vamos a suponer que el orden alfabético de las variables $(x> y> z)$ se utiliza para definir el orden lexicográfico
+a menos que digamos lo contrario de forma explícita.
+
+\textbf{Proposición 1.} El orden léxico en $\mathbb{Z}^{n}_{\geq0}$ es un orden monomial.
+
+Para el orden léxico con $x> y> z$, tenemos $x >_{lex} y^{5}$. Para algunos propósitos, es posible que también deseemos tener los grados totales de los monomios en cuenta y poner los monomios de mayor grado primero.
+Una forma de hacer esto es el orden lexicográfico graduado(u orden grlex).
+
+\textbf{Definición 3. (Orden lexicográfico graduado)}. Sean $\alpha,\beta \in \mathbb{Z}^{n}_{\geq0}$. Decimos $\alpha >_{grlex} \beta$ si 
+\[
+|\alpha| = \sum_{i=1}^{n}\alpha_{i} > |\beta| = \sum_{i=1}^{n}\beta_{i}, \quad \mbox{or} \quad|\alpha| = |\beta|\, and \, \alpha>_{lex}\beta.
+\]
+
+Otro orden es el orden lexicográfico graduado inverso(u orden grevlex).
+
+\textbf{Definición 4. (Orden lexicográfico graduado inverso)}. Sean $\alpha,\beta \in \mathbb{Z}^{n}_{\geq0}$. Decimos $\alpha >_{grevlex} \beta$ si 
+\begin{multline*}
+|\alpha| = \sum_{i=1}^{n}\alpha_{i} > |\beta| = \sum_{i=1}^{n}\beta_{i},\mbox{ or } |\alpha| = |\beta| \mbox{ y el elemento no negativo mas a}\\ \mbox{la derecha de } \alpha-\beta\in\mathbb{Z}^{n}_{\geq0}\mbox{ es negativo.}
+\end{multline*}
+
+Hay muchos otros órdenes de monomios, además de los considerados aquí. La mayoría de los sistemas de álgebra computacional tienen implementado el orden lexicográfico, y la mayoría también permiten otros órdenes, como grlex y grevlex.
+
+Veamos ahora un ejemplo para entender mejor cada uno, consideremos el polinomio $f = 4xy^{2}z + 4z^{2} - 5x^{3} + 7x^{2}z^{2} \in k[x,y,z]$. Entonces:
+\begin{itemize}
+	\item Con orden lex    $f = - 5x^{3} + 7x^{2}z^{2} + 4xy^{2}z + 4z^{2}$
+	\item Con orden grlex  $f = 7x^{2}z^{2} + 4xy^{2}z - 5x^{3} + 4z^{2}$
+	\item Con orden grvlex $f = 4xy^{2}z + 7x^{2}z^{2} - 5x^{3} + 4z^{2}$
+\end{itemize}
+
+\textbf{Definición 5.} Sea $f = \sum_{\alpha}a_{\alpha}x^{\alpha}$ un polinomio distinto de cero en $k[x_{1},...,x_{n}]$ y sea $>$ un orden monomial.
+
+\begin{enumerate}
+	\item [(i)] El multigrado de $f$ es
+	\begin{center}
+		multideg$(f)$ = max$(\alpha \in \mathbb{Z}^{n}_{\geq0} | a_{\alpha} \neq 0)$
+	\end{center}
+	(El máximo se toma con respecto a $>$).
+	
+	\item [(ii)] El coeficiente principal de f es
+	\begin{center}
+		LC$(f) = a_{multideg(f)} \in k$.
+	\end{center}
+
+	\item [(ii)] El monomio principal de f es
+	\begin{center}
+		LM$(f) = x^{multideg(f)}$
+	\end{center}
+	(Con coeficiente 1).
+	\item [(ii)] El término líder de f es
+	\begin{center}
+		LT$(f)$ = LC$(f) \cdot $ LM$(f)$.
+	\end{center}
+\end{enumerate}
+
+Para ver esto usemos el ejemplo anterior, sea $f = 4xy^{2}z + 4z^{2} - 5x^{3} + 7x^{2}z^{2}$ y denotamos por $>$ el orden lexicográfico. Entonces
+\begin{align*}
+	multideg(f) &= (3,0,0), \\
+	LC(f) &= -5,\\
+	LM(f) &= x^{3},\\
+	LT(f) &= -5x^{3}.
+\end{align*} 
+
+El multigrado tiene las siguientes propiedades útiles.
+
+\textbf{Lema 1.} Sea $f,g \in k[x_{1},...,x_{n}]$ un polinomio distinto de cero. Entonces:
+\begin{enumerate}
+	\item [(i)]  multideg($fg$) = multideg($f$) + multideg($g$).
+	\item [(ii)] Si $f + g \neq 0$, entonces multideg($f + g$) $\leq$ max(multideg($f$),multideg($g$)). Si, además, multideg($f$) $\neq$ multideg($g$), entonces se produce la igualdad.
+\end{enumerate}
+
+\section{Un Algoritmo de División en $k[x_{1},...,x_{n}]$}
+
+Sabemos que el algoritmo de la división se podría utilizar para resolver el problema de la pertenencia a los ideales para polinomios de una variable. Para estudiar este problema cuando hay más variables, vamos a formular un algoritmo de la división de polinomios en $k[x_{1},...,x_{n}]$ que extiende al algoritmo para $k[x]$.
+La idea básica del algoritmo es la misma que en el caso de una variable: queremos cancelar el término líder de f(con respecto a un orden monomial fijo).
+
+\textbf{Teorema 1.} (Algoritmo de la División en $k[x_{1},...,x_{n}]$). Sea $>$ un orden monomial en $\mathbb{Z}^{n}_{\geq0}$, y sea $F = (f_{1},...,f_{s})$ una s-tupla ordenada de polinomios en $k[x_{1},...,x_{n}]$.
+Entonces, cada $f \in k[x_{1},...,x_{n}]$ se puede escribir como
+\[
+f = q_{1}f_{1} + \cdots + q_{s}f_{s} + r,
+\]
+
+donde $q_{i},r \in k[x_{1},...,x_{n}]$, y, o bien $r = 0$, o $r$ es una combinación lineal, con coeficientes en k, de monomios, ninguno de los cuales es divisible por cualquiera de LT($f_{1}$),...,LT($f_{s}$).Llamamos a $r$ el resto de $f$ en una división por $F$. Por otra parte, si $q_{i}f_{i} \neq 0$, entonces
+\[
+multideg(f) \geq multideg(q_{i}f_{i}).
+\]
+
+\textbf{Ejemplo.} Consideramos la siguiente división con orden lex. Sea 
+\[
+f = x^{3}y^{2} + xy + x
+\]
+y nuestros divisores
+\[
+g_{1} = y^{2} + 1,
+\]
+\[
+g_{2} = xy + 1.
+\]
+Vemos que $LT(g_{1}) = y^{2}$ divide a $LT(f) = x^{3}y^{2}$. Por lo que actualizamos el cociente, añadiendo $x^{3}$. Ahora actualizamos el dividendo:
+\[
+(x^{3}y^{2} + xy + x) - x^{3}(y^{2}+1)=-x^{3}+xy+x.
+\]
+Como $LT(g_{1}) = y^{2}$ no divide a $-x^{3}$, nos fijamos en el siguiente polinomio en la lista de divisores y vemos que $LT(g_{2}) = xy$ tampoco lo divide. Así que continuamos con el siguiente término en f, que es $xy$. Como $g_{1}$ es lo primero en la lista de divisores, comprobamos si $LT(g_{1}) = y^{2}$ divide a $xy$. Ya que no es así, pasamos a $LT(g_{2}) = xy$ y vemos que si lo hace. Así que actualizamos el cociente correspondiente a $g_{2}$ sumándole uno. De nuevo actualizamos el dividendo:
+\[
+(-x^{3} + xy + x) -1\cdot(xy+1)=-x^{3}+x-1.
+\]
+Observe que ninguno de los términos lideres de los divisores divide a los términos del dividendo.
+Así, la división es completa y el dividendo se convierte en el resto.
+
+Poniendolo todo en conjunto tenemos:
+\[
+x^{3}y^{2} + xy + x = 0\cdot(y^{2}+1)+ (x^{2}y-x+1)\cdot(xy+1)+(2x-1).
+\]
+La necesidad de un resto bien definido en la división es una de las motivaciones para la definición de las bases de Gröbner.
+
+
+\section{Ideales monomiales}
+
+En general no se obtiene un residuo determinar claramente a partir del algoritmo de la división. Sin embargo, la definición posterior de una base de Gröbner tendrá la cualidad de que la división de $f$ por $G$ da el mismo resto $r$ sin importar como estén clasificados los elementos de $G$ en la división. Puesto que vamos a demostrar que todo ideal tiene una base de Gröbner, somos capaces de resolver el problema de pertenencia de ideales con una condición necesaria y suficiente para que un polinomio $f$ sea un miembro de un ideal $I$, que la división de $f$ por la base de Gröbner de $I$ devuelva resto $0$.
+
+\textbf{Definición 1.} Un ideal monomial es un ideal generado por un conjunto de monomios.
+\\
+
+Es decir, $I$ es un ideal monomial si hay un subconjunto $A \subset Z^{n}_{n\geq0}$ tal que $I$ consta de todos los polinomios que son sumas finitas de la forma $\sum_{\alpha\in A}h_{\alpha}x^{\alpha}$, donde $h_{\alpha}\in k[x_{1},\dots,x_{n}]$. Nosotros notaremos $I = \langle x^{\alpha}|\alpha\in A \rangle$.
+Por ejemplo, $I = \langle x^{5}y^{2}z,x^{2}yz^{2},xy^{3}z^{2} \rangle \subset k[x,y,z]$ es un ideal monomial.
+Para todos los ideales monomiales tenemos el hecho de que si $x^{\beta}$ está en $I$, entonces $x^{\beta}$ es divisible por $x^{\alpha}$ para algún $\alpha \in A$. Por otra parte para cada polinomio $f$ en un ideal monomial $I$, podemos decir que cada término de $f$ está en $I$ y que $f$ es una combinación k-lineal de los monomios de $I$.
+
+\textbf{Definición 2.} Sea $I \in k[x_{1},\dots,x_{n}]$ un ideal no nulo.
+\begin{enumerate}
+	\item Sea LT($I$) el conjunto de terminos lideres de los elementos de $I$.
+	\begin{center}
+		LT($I$) = $\lbrace cx^{\alpha} |$ entonces existe $f\in I$ con LT($f$) = $cx^{\alpha}\rbrace$ 
+	\end{center}
+	\item Denotaremos con $\langle$LT($I$)$\rangle $ al ideal generado por los elementos de LT($I$).
+\end{enumerate}
+
+
+Así, por ejemplo, LT($I$) es un ideal monomial. Como veremos a continuación los ideales $\langle$LT($I$)$\rangle $ y $\langle$LT($g_{1}),\dots,$LT($g_{s}$)$\rangle$ no son siempre iguales. Aunque siempre tendremos $\langle$LT($g_{1}),\dots,$LT($g_{s}$)$\rangle \subset \langle$LT($I$)$\rangle$, hay casos en que la inclusión contraria no se cumple. Por ejemplo consideremos el siguiente ejemplo:
+
+\textbf{Ejemplo.} Sea $I = \langle f_{1},f_{2}\rangle$ donde $f_{1}= x^{3}-2xy$ y $f_{2}= x^{3} - 2y^{2} +x $ y usando orden lex. Entonces:
+\[
+f_{3}:=y\cdotp(x^{3}-2xy)-(x^{3}y-2 y^{2}+x)=-2xy^{2}+2y^{2}-x
+\] 
+así que $f_{3}\in I$ y LT($f_{3}$)=$-2xy^{2}\in\langle$LT($I$)$\rangle $,pero no en $\langle$LT($f_{1}$),LT($f_{2}$)$\rangle$ ya que no es divisible por los terminos lideres de $f_{1}$ o $f_{2}$. 
+
+Dado que nuestro objetivo es la obtención de ideales que cumplan la propiedad de que $\langle$LT($I$)$\rangle = \langle$LT($g_{1}),\dots,$LT($g_{s}$)$\rangle \subset $, se quieren eliminar los casos como el de arriba, asegurándose de que nuestra base genera $\langle$LT($I$)$\rangle$. Esto motiva la siguiente definición:
+
+\textbf{Definición 3.} Fijado un orden monomial en $k[x_{1},\dots, x_{n}]$. Un subconjunto finito $G = \lbrace g_{1},\dots, g_{t}\rbrace$ es una base de Gröbner si
+\begin{center}
+$\langle$LT($g_{1}),\dots,$LT($g_{s}$)$\rangle = \langle$LT($I$)$\rangle$
+\end{center}
+
+Como corolario del Teorema de la base de Hilbert aplicado a $\langle$LT($I$)$\rangle$ tenemos:
+
+\textbf{Corolario 1.} Sea $I$ un ideal polinomial distinto de cero, entonces $I$ tiene una base de Gröbner.
+
+Si bien este corolario nos permite comenzar a demostrar la existencia de una base de Gröbner, la prueba no es constructiva y nos ofrece poca información sobre como obtener una. Nos gustaría obtener un conjunto de generadores de forma que todos los términos lideres de los polinomios en el conjunto, generasen los términos lideres del ideal $I$.  Esto falla cuando hay una cancelación de los términos lideres del tipo del ejemplo anterior.
+Para determinar mejor cuando esta cancelación se produce construimos un polinomio especial que produce nuevos términos lideres.
+
+\textbf{Definición 4.} Sean $f,g\in k[x_{1},\dots,x_{n}]$ polinomios distintios de 0.
+\begin{enumerate}
+	\item Si $multideg(f) = \alpha$ y $multideg(g) = \beta$, entonces sea $\gamma=(\gamma_{1},\dots,\gamma_{n})$, 
+	donde $\gamma_{i} = max\left(\alpha_{i},\beta_{i}\right) \forall i$. Llamaremos $x^{\gamma}$ al mínimo común múltiplo de LT($f$) y LT($g$), y lo escribiremos $x^{\gamma}$= LCM(LM($f$),LM($g$)).
+	
+	\item El S-Polinomio de f y g es la combinación:
+	\begin{center}
+		$S(f,g) = \frac{x^{\gamma}}{LT(f)}\cdot f- \frac{x^{\gamma}}{LT(g)}\cdot g$.
+	\end{center}
+\end{enumerate}
+
+\textbf{Ejemplo.} Sean $f = x^{4}yz + x^{2}y^{3}z+xz$ y $g=2x^{2}y^{2}z+xy^{2}+xz^{3}$ en $\mathbb{Q}[x,y,z]$ con el orden lexicográfico en el monomios. Entonces $\gamma=(4,2,1)$ y tenemos:
+\begin{eqnarray}
+\nonumber S(f,g) &=& \frac{x^{4}y^{2}z}{x^{4}yz}\cdot f - \frac{x^{4}y^{2}z}{2x^{2}y^{2}z}\cdot g \\
+\nonumber &=& y \cdot f - \frac{1}{2}x^{2}\cdot g\\
+\nonumber &=& -\frac{1}{2}x^{3}y^{2} -\frac{1}{2}x^{3}z^{3} + x^{2}y^{4}z+xyz
+\end{eqnarray}
+
+Nótese la cancelación de los términos lideres ocurrida por la construcción del S-polinomio.
+Una vez que una base contiene todos los posibles S-polinomios de los polinomios del conjunto de generación de ideales, no hay polinomios extra en$\langle$LT($I$)$\rangle $ que no estén en$\langle$LT($g_{1}),\dots,$LT($g_{s}$)$\rangle = \langle$LT($I$)$\rangle$. Esto lleva a:
+
+\textbf{Teorema 1.(Criterio de Buchberger)} Sea $I$ un ideal polinomial. Entonces una base $G = \lbrace g_{1}\dots,g_{s}\rbrace$ de $I$ es una base de Gröbner de $I$ si y solo si para todos los pares $i\neq j$, el resto de la division de $S(g_{i},g_{j})$ entre $G$ es cero.
+ 
+\section{Bases de Gröbner y Algoritmo de Buchberger}
+
+A continuación vamos a dar la formulación del algoritmo de Buchberger y un ejemplo de su uso para calcular una base de Gröbner.
+Para una mayor claridad en nuestra discusión, introducimos la siguiente notación:
+
+\textbf{Definición. 1} Escribimos $\overline{f}^{G}$ para el resto de la división de f por la lista de polinomios $G=\lbrace g_{1},\dots,g_{s}\rbrace$.
+
+Por ejemplo si $G=\left(x^3y^2-y^2z,xy^2-yz \right) $ usando orden lex, tenemos:
+\[
+\overline{x^{5}y^{3}}^{G} = yz^{3}
+\]
+ya que tenemos por el algoritmo de la división
+\[
+x^5y^3 = (x^2y)\cdot (x^3y^2-y^2z)+(xyz +z^2)\cdot (xy^2-yz)+yz^3.
+\]
+
+\textbf{Teorema 1.(Algoritmo de Buchberger)} Sea $I = \langle f_{1},\dots,f_{s}\rangle \neq (0)$ sea un ideal polinomial. Entonces una base de Gröbner para $I$ se puede construir en un numero de pasos finito.
+
+El algoritmo funciona de la siguiente manera: Sean $F = (f_{1},\dots,f_{s})$ una lista de los polinomios que definen $I$. Para cada par de polinomios $f_{i}, f_{j}$ en $F$ se calcula su S-polinomio, $S$, y se divide por los polinomios  $f_{1},\dots,f_{s}$ en $F$ obteniendo $\overline{S}^{F}$. Si $\overline{S}^{F} \neq 0 $, añadimos $\overline{S}^{F}$ a $F$ y empezar de nuevo con $F = F\cup\lbrace\overline{S}^{F}\rbrace$. Se repite el proceso hasta que todos los S-polinomios de polinomios en $F$ tengan resto 0 después de dividir por F.
+
+\textbf{Ejemplo.}
+Consideramos el anillo $k[x,y,z]$ con orden lex y sean $I = \langle -2xy +x,x^3y-2x^2+y\rangle$ y $F = (-2xy +x, x^3y-2x^2+y)$. Como $S(f_{1},f_{2})= \frac{1}{2}x^3-2x^2+y$ y $\overline{S(f_{1},f_{2})}^{F}= \frac{1}{2}x^3-2x^2+y \neq 0$, añadimos $\overline{S(f_{1},f_{2})}^{F}$ a $F$ añadiendolo como nuevo generador $f_{3}= \frac{1}{2}x^3-2x^2+y$. Ahora comenzamos de nuevo, pero con $F=(f_{1},f_{2},f_{3})$:
+\begin{eqnarray}
+\nonumber &S(f_{1},f_{2})& = \frac{1}{2}x^3-2x^2+y \\
+\nonumber &\overline{S(f_{1},f_{2})}^{F}& = 0\\
+\nonumber &S(f_{1},f_{3})& = \frac{1}{2}x^3-4x^2y+2y^2 \\
+\nonumber &\overline{S(f_{1},f_{3})}^{F}& = 2y^2-y
+\end{eqnarray}
+
+Por tanto debemos añadir  $f_{4}= 2y^2-y$ a nuestro conjunto de generadores. Trabando ahora con $F=(f_{1},f_{2},f_{3},f_{4})$:
+
+\begin{eqnarray}
+\nonumber &\overline{S(f_{1},f_{2})}^{F}& =  \overline{S(f_{1},f_{3})}^{F} = 0 \\
+\nonumber &S(f_{2},f_{3})& = -4x^2y + 2x^2 + 2y^2 -y = 2x\cdot(-2xy +x) + 1\cdot(2y^2 -y)\\
+\nonumber &\overline{S(f_{2},f_{3})}^{F}& = 0\\
+\nonumber &S(f_{2},f_{4})& = -\frac{1}{2}x^3y+2x^2y -y^2 =\left(\frac{1}{4}x^2 -x\right) \cdot(-2xy+x) - \frac{1}{2}\cdot\left(\frac{1}{2}x^3 -2x^2 +y\right) - \frac{1}{2}\cdot(2y^2 -y) \\
+\nonumber &\overline{S(f_{2},f_{4})}^{F}& = 0\\
+\nonumber &S(f_{3},f_{4})& = -\frac{1}{2}x^2y^2-2y^3  =\left(\frac{1}{4}x^2 -2xy - x\right) \cdot(-2xy+x) - \frac{1}{2}\cdot\left(\frac{1}{2}x^3 -2x^2 +y\right) +\left(-y-\frac{1}{2}\right)\cdot(2y^2-y) \\
+\nonumber &\overline{S(f_{3},f_{4})}^{F}& = 0
+\end{eqnarray}
+
+Como $S(f_{1},f_{4})=0$, tenemos $\overline{S(f_{i},f_{j})}^{F} \forall 1\leq i\leq j\leq 4$. Por el criterio de Buchberger obtenemos que $F=(f_{1},f_{2},f_{3},f_{4}) = (-2xy+x,x^3y-2x^2+y,\frac{1}{2}x^3-2x^2+y,2y^2-y)$ es una base de Gröbner para $I$.
+
+
+
+
+
+

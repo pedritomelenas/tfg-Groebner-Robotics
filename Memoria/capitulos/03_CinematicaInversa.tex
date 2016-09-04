@@ -1,0 +1,18 @@
+\chapter{Cinemática Inversa}
+
+Para empezar, vamos a considerar el problema de la cinemática inversa para un brazo robot que se mueve en un plano con tres articulaciones de revolución. Dado un punto $(x_{1},y_{1})=(a, b) \in \mathbf{R}^2 $ y una orientación, que desean determinar si es posible colocar la mano del robot en ese punto con esa orientación. Si es posible, deseamos encontrar todas las combinaciones de configuración de conjuntos que lograr esto.
+
+Es bastante fácil ver geométricamente que si $l_{3}=l_{2}=l$, la mano de nuestro robot se puede colocar en cualquier punto del disco cerrado de $2l$ de radio con centro en la articulación 1, que a su vez está en el origen de coordenadas. Por otro lado, si $l_{3} \neq l_{2}$, entonces las posiciones de las manos rellenan un anillo cerrado centrada en la articulación 1. 
+
+Para un robot de este tipo, también es fácil controlar la orientación de la mano. Puesto que la configuración de la articulación 3 es independiente de las de la 1 y 2, se observa que, para cualquiera $\theta_{1}$ y $\theta_{2}$, es posible alcanzar cualquier orientación deseada $\alpha=\theta_{1}+\theta_{2}+\theta_{3}$ configurando $\theta_{3}=\alpha-(\theta_{1}+\theta_{2})$ de acuerdo a ella.
+
+Para simplificar nuestra resolución del problema de cinemática inversa, utilizaremos la observación anterior para ignorar la orientación mano. Por lo tanto, nos concentraremos en la posición de la mano, que es una función que depende solo de $\theta_{1}$ y $\theta_{2}$. A partir de la ecuación $\ref{eqcs}$ del apartado anterior, vemos que las posibles maneras de colocar la mano en un punto dado $(x_{1},y_{1}) = (a,b)$ se describen mediante el siguiente sistema de ecuaciones polinómicas:
+\begin{eqnarray} \nonumber 
+a = l_{3}(c_{1}c_{2} - s_{1}s_{2}) + l_{2}c_{1},\\  \nonumber 
+b = l_{3}(c_{1}s_{2} - c_{2}s_{1}) + l_{2}s_{1},\\
+0 = c_{1}^{2} + s_{1}^{2} - 1\\ \nonumber 
+0 = c_{2}^{2} + s_{2}^{2} - 1
+\end{eqnarray}
+para $c_{1},s_{1},c_{2},s_{2}$. 
+Para resolver estas ecuaciones vamos a usar bases de Gröbner.
+

@@ -1,0 +1,189 @@
+\chapter{Cinemática Directa}
+
+En esta sección, presentaremos un método estándar para resolver el problema de la cinemática directa para un ``brazo". Todos nuestros robots tendrán un primer segmento que está anclado o fijado en posición. En otras palabras, no existe una articulación en el punto inicial del segmento 1. Con esta convención, vamos a colocar el origen de nuestro sistema de coordenadas en la articulación que une los dos primeros segmentos del brazo, cuya posición también es fija.
+
+Además del sistema de coordenadas global $(x_{1}, y_{1})$, se introduce un sistema de coordenadas local en cada una de las articulaciones de revolución para describir las posiciones relativas de los segmentos que se unen en esa articulación. Naturalmente, estos sistemas de coordenadas cambiarán a medida que la posición del ``brazo" varíe.
+
+En una articulación de revolución$i$, introducimos un sistema de coordenadas $(x_{i+1},y_{i+1})$ de la siguiente manera. 
+El origen se sitúa en la articulación $i$. Colocamos la dirección de las x positivas a largo del segmento $i+1$. Por tanto, para cada $i\geq2$, las coordenadas de la articulación $i$ son $(l_{i},0)$, donde $l_{i}$ es la longitud del segmento $i$.
+
+Nuestro primer objetivo es relacionar las coordenadas $(x_{i+1},y_{i+1})$ de un punto con las coordenadas $(x_{i},y_{i})$ las coordenadas de dicho punto. Sea $\theta_{i}$ el ángulo en sentido antihorario desde el eje $x_{i}$ al eje $x_{i+1}$. Si un punto $q$ tiene las siguientes coordenadas en $(x_{i+1},y_{i+1})$, $ q = (a_{i+1},b_{i+1})$ , entonces, para obtener sus coordenadas en $(x_{i},y_{i})$ , osea
+$ q = (a_{i},b_{i})$, primero hacemos un giro de ángulo $\theta_{i}$ (para alinear los ejes$x_{i}$ y $x_{i+1}$), y luego una traslación mediante el vector $(l_{i},0)$ (para hacer coincidir los orígenes de los sistemas de coordenadas). 
+
+Por tanto, tenemos la siguiente relación entre las coordenadas $(x_{i},y_{i})$ y $(x_{i+1},y_{i+1})$ de $q$:
+
+\[
+\begin{pmatrix} 
+a_{i} \\ 
+b_{i} \\
+\end{pmatrix} = 
+\begin{pmatrix} 
+cos\theta_{i} & -sin\theta_{i} \\
+sin\theta_{i} & cos\theta_{i} 
+\end{pmatrix} \cdotp
+\begin{pmatrix} 
+a_{i+1} \\ 
+b_{i+2} \\
+\end{pmatrix} + 
+\begin{pmatrix} 
+l_{i} \\ 
+0 \\
+\end{pmatrix}
+\]
+
+Esto también se puede escribir de forma abreviada utilizando una matriz de $3x3$ y vectores de 3 componentes:
+
+\begin{equation}
+\begin{pmatrix} 
+a_{i} \\ 
+b_{i} \\
+1
+\end{pmatrix} = 
+\begin{pmatrix} 
+cos\theta_{i} & -sin\theta_{i} & l_{i}\\
+sin\theta_{i} & cos\theta_{i}  & 0 \\
+0 & 0 & 1
+\end{pmatrix} \cdotp
+\begin{pmatrix} 
+a_{i+1} \\
+b_{i+2} \\
+1
+\end{pmatrix} = A_{i} \cdotp
+\begin{pmatrix} 
+a_{i+1} \\ 
+b_{i+2} \\
+1
+\end{pmatrix}
+\end{equation}
+
+Esto nos permite combinar la rotación $\theta_{i}$ con la traslación a lo largo del segmento i en una sola matriz $3x3$ $A_{i}$.
+
+Veamos ahora como trabajaríamos si considerásemos un ``brazo'' con 3 articulaciones de revolución que se mueve en el plano. Pensaremos en la mano como el segmento 4, que está unido al 3 por de la articulación 3. Tenemos las matrices $A_{1}$, $A_{2}$ y $A_{3}$ como en la fórmula anterior. La observación clave es que las coordenadas globales de cualquier punto se pueden obtener a partir de sus coordenadas en el sistema de coordenadas $(x_{4},y_{4})$ y operando hasta llegar al $(x_{1},y_{1})$ pasando por todas las articulaciones intermedias de una en una. En otras palabras, se multiplica el vector de coordenadas del punto en $(x_{4},y_{4})$ por A3, A2, A1 en orden:
+
+\[
+\begin{pmatrix} 
+x_{1} \\ 
+y_{1} \\
+1
+\end{pmatrix} = A_{1}A_{2}A_{3}
+\begin{pmatrix} 
+x_{4} \\ 
+y_{4} \\
+1
+\end{pmatrix}
+\]
+Usando las fórmulas de adición trigonométricas, esta ecuación puede escribirse como
+{\small\[
+\begin{pmatrix} 
+x_{1} \\ 
+y_{1} \\
+1
+\end{pmatrix} = 
+\begin{pmatrix} 
+cos(\theta_{1}+\theta_{2}+\theta_{3}) & -sin(\theta_{1}+\theta_{2}+\theta_{3}) & l_{3}cos(\theta_{1} + \theta_{2})+l_{2}cos\theta_{1}\\
+sin(\theta_{1}+\theta_{2}+\theta_{3}) & cos(\theta_{1}+\theta_{2}+\theta_{3}) & l_{3}sin(\theta_{1} + \theta_{2})+l_{2}sin\theta_{1}\\
+0&0&1
+\end{pmatrix}
+\begin{pmatrix} 
+x_{4} \\ 
+y_{4} \\
+1
+\end{pmatrix}
+\]}
+Dado que las coordenadas de la mano en $(x_{4},y_{4})$ son $(0,0)$ (ya que la mano está unida directamente a la articulación 3), obtenemos las coordenadas en $(x_{1},y_{1})$ haciendo $x_{4} = y_{4} = 0$ y haciendo el producto anterior. El resultado es
+
+\[
+\begin{pmatrix} 
+x_{1} \\ 
+y_{1} \\
+1
+\end{pmatrix} = 
+\begin{pmatrix} 
+l_{3}cos(\theta_{1} + \theta_{2})+l_{2}cos\theta_{1}\\
+l_{3}sin(\theta_{1} + \theta_{2})+l_{2}sin\theta_{1}\\
+1
+\end{pmatrix}
+\]
+
+La orientación de la mano se determina si conocemos el ángulo entre el eje $x_{4}$ y la dirección de cualquier característica particular de interés para nosotros en la mano. Por ejemplo, puede ser que simplemente quieren utilizar la dirección del eje $x_{4}$ para especificar esta orientación.
+De nuestros cálculos, sabemos que el ángulo entre el eje $x_{1}$ y el $x_{4}$ es simplemente $\theta_{1} + \theta_{2} + \theta_{3}$.
+
+Si combinamos este hecho acerca de la orientación de la mano con la fórmula anterior para la posición de la mano, se obtiene una descripción explícita de la correspondencia $f: \mathcal{J} \longrightarrow \mathcal{C}$ introducido en el capitulo anterior. Como una función de los ángulos de las articulación $\theta_{i}$, la configuración de la mano está dada por
+
+\begin{equation} \label{eqf} 
+f(\theta_{1}, \theta_{2}, \theta_{3})= 
+\begin{pmatrix} 
+l_{3}cos(\theta_{1} + \theta_{2})+l_{2}cos\theta_{1}\\
+l_{3}sin(\theta_{1} + \theta_{2})+l_{2}sin\theta_{1}\\
+\theta_{1} + \theta_{2} + \theta_{3}
+\end{pmatrix}
+\end{equation}
+
+Las mismas ideas se aplican cuando están presentes cualquier número de articulaciones de revolución.
+
+
+Veamos ahora que las articulaciones telescópicas también pueden ser tratadas dentro de este marco. Por ejemplo, consideremos un robot cuyos primeros tres segmentos y articulaciones son los mismos que los del robot anterior, pero que tiene una articulación telescópica adicional entre el segmento 4 y la mano. Por lo tanto, el segmento 4 se tiene longitud variable y el segmento 5 será la mano.
+
+Podemos describir el robot tal como sigue. Las tres juntas de revolución nos permiten exactamente la misma libertad en la colocación de junta 3 como en el robot estudiado anteriormente. Sin embargo, la articulación prismática nos permite cambiar la longitud del segmento 4 en cualquier valor entre $l_{4} = m_{1}$ (cuando está retraído) y $l_{4} = m_{2}$ (cuando está completamente extendido). Siguiendo con el razonamiento dado anteriormente, si se conoce la configuración $l_{4}$ de la articulación telescópica, entonces la posición de la mano será dada por la multiplicación de la matriz del producto $A_{1}A_{2}A_{3}$ por las coordenadas del vector de la mano, que serán $(l_{4},0)$. De ello se desprende que la configuración de la mano está dada por
+\begin{equation} \label{eqg}
+g(\theta_{1},\theta_{2},\theta_{3},l_{4})= 
+\begin{pmatrix} 
+l_{4}cos(\theta_{1} + \theta_{2} + l_{3}) + l_{3}cos(\theta_{1} + \theta_{2}) + l_{2}cos\theta_{1}\\
+l_{4}sin(\theta_{1} + \theta_{2} + l_{3}) + l_{3}sin(\theta_{1} + \theta_{2}) + l_{2}sin\theta_{1}\\
+\theta_{1} + \theta_{2} + \theta_{3}
+\end{pmatrix}
+\end{equation}
+Como antes, $l_{2}$ y $l_{3}$ son constantes, pero $l_{4} \epsilon \left[ m_{1},m_{2}\right]$ es ahora otra variable. La orientación de la mano será dada por $\theta_{1} + \theta_{2} + \theta_{3}$ como antes, ya que la configuración de la articulación telescópica no afectará a la dirección de la mano.
+
+A continuación vamos a discutir cómo fórmulas tales como las anteriores pueden ser convertidos en representaciones de f y g como asignaciones polinómicas o racionales en las variables adecuadas.
+Las variables para articulaciones de revolución y telescópicas se tratan de forma diferente. Para las articulaciones de revolución, la forma más directa de convertir a un conjunto de ecuaciones polinomio es usar la idea de que aunque el coseno y el seno son funciones trascendentales, dan una parametrización
+$$ x = cos\theta,$$
+$$ y = sen\theta $$
+de la variedad algebraica $\mathbf{V}(x^{2}+y^{2}-1)$ en el plano. Por lo tanto, podemos escribir los componentes de la parte derecha de $\ref{eqf}$ o, de forma equivalente, las entradas de la matriz $A_{1}A_{2}A_{3}$ en $\ref{eqg}$ como funciones de 
+$$ c_{i} = cos\theta_{i},$$
+$$ s_{i} = sen\theta_{i} $$
+
+sujetas a las restricciones
+\begin{equation}\label{eqcossin}
+c_{i}^{2}+s_{i}^{2}-1=0
+\end{equation}
+
+para $i = 1,2,3$. Tenga en cuenta que la variedad definida por estos tres ecuaciones en $\mathcal{R}^{6}$ es una realización concreta del espacio de la articulación $\mathcal{J}$  para este tipo de robot. Geométricamente, esta variedad es sólo un producto cartesiano de tres copias del círculo.
+Explícitamente, se obtiene a partir de \ref{eqf} una expresión para la posición de la mano como una función de variables $c_{1},s_{1},c_{2},s_{2},c_{3},s_{3}$. Usando las fórmulas trigonométricas de adición, podemos escribir
+\[
+cos(\theta_{1} + \theta_{2}) = cos\theta_{1}cos\theta_{2} - sin\theta_{1}sin\theta_{2} = c_{1}c_{2} - s_{1}s_{2}.
+\]
+De manera similar,
+\[
+sin(\theta_{1} + \theta_{2}) = sin\theta_{1}cos\theta_{2} - sin\theta_{1}cos\theta_{2} = s_{1}c_{2} - s_{2}c_{1}.
+\]
+
+De este modo, las coordenadas de la posición de la mano en $(x_{1},y_{1})$ son:
+
+\begin{equation}\label{eqcs}
+\begin{pmatrix} 
+l_{3}(c_{1}c_{2} - s_{1}s_{2})+l_{2}c{1}\\
+l_{3}(s_{1}c_{2} + s_{2}c_{1})+l_{2}s{1}
+\end{pmatrix} \cdot
+\end{equation}
+
+%Me queda una pagina de este tema (302)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

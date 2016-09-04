@@ -1,0 +1,38 @@
+\chapter{Introducción}
+
+En este proyecto abordaremos el movimiento de un brazo robótico desde un punto del espacio, hasta alcanzar otro. Resolveremos este problema mediante el uso de bases de Gröbner.
+
+Siempre vamos a considerar brazos construidos a partir de segmentos rígidos, entendiendo por esto que no se doblan, conectados por articulaciones de varios tipos. Para simplificar, vamos a considerar sólo los robots en que los segmentos están conectados en serie, como en un miembro humano. Un extremo de nuestro brazo por lo general se fija en su posición y en el otro extremo estará la ``mano", que a veces se considera como un segmento final del robot. En robots reales, esta ``mano'' puede estar provista de mecanismos para agarrar objetos o puede ser una herramienta para realizar alguna tarea. Por lo tanto, uno de los principales objetivos es ser capaz de describir y especificar la posición y orientación de la ``mano".
+
+Dado que los segmentos de nuestro brazo son rígidos, los posibles movimientos del brazo se determinan por los de las articulaciones. Muchos robots reales son construidos utilizando articulaciones de revolución y telescópicas. 
+La de revolución permite una rotación de un segmento con respecto al otro. Nosotros asumiremos que los dos segmentos en cuestión se encuentran en un plano y todo movimiento de la articulación dejara a los dos segmentos en ese plano.
+La telescópica permite a una parte del brazo moverse a lo largo de un eje.
+
+Si hay varias articulaciones en un robot, vamos a suponer para simplificar, que las articulaciones se encuentran todas en el mismo plano, que los ejes de rotación de todos articulaciones angulares son perpendiculares a dicho plano, y, además, que la traducción de los ejes de las articulaciones prismáticas se encuentran todas en el plano de las articulaciones. Por lo tanto, todo movimiento se llevará a cabo en un plano. Por supuesto, esto conduce a una clase muy restringida de robots. Los robots reales deben ser por lo general capaces de moverse en 3 dimensiones. Para lograr esto se utilizan otros tipos y combinaciones de articulaciones. Estos incluyen articulaciones ``bola", también conocidas como universales, que permiten la rotación sobre cualquier eje que pasa por un cierto punto en $\mathbf{R}^{3}$ y articulaciones  helicoidales o de "tornillo" que son combinaciones de rotación y traslación a lo largo del eje de rotación en $\mathbf{R}^{3}$. También sería posible conectar varios segmentos de un robot con las articulaciones de revolución, pero con ejes no paralelos de rotación. Todas estas posibles configuraciones se pueden tratar por métodos similares a los que vamos a estudiar, pero no vamos a entrar en detalle sobre ninguno de ellos.
+
+En general, la posición o configuración de una articulación de giro entre segmentos consecutivos puede ser descrito midiendo el ángulo $\vartheta$ (en sentido contrario a las agujas del reloj) formado por dichos segmentos. Debido a esto, la configuración de una articulación de este tipo puede ser parametrizada por un círculo $\mathbf{S}^1$ o por el intervalo $[0, 2\pi]$ con los puntos finales identificados. (En algunos casos, una articulación de revolución puede no ser libre para girar a través de un círculo completo, y entonces particularizaríamos las posibles configuraciones mediante un subconjunto de $\mathbf{S}^1$.) 
+Del mismo modo, la configuración de una articulación telescópica se puede especificar dando la distancia entre el extremo de esta articulación y de la anterior). De cualquier manera, la configuración de una articulación telescópica puede ser parametrizada por un intervalo finito de números reales.
+
+Si las configuraciones de las articulaciones de nuestro robot se pueden especificar de forma independiente, entonces las posibles configuraciones de todo el conjunto de articulaciones en un brazo que se mueve en un plano con $r$ articulaciones de revolución y $t$ telescópicas puede ser parametrizado por el producto cartesiano
+$$\mathcal{J}= S^{1}\times\cdot\cdot\cdot\times S^{1}\times I_{1}\times\cdot\cdot\cdot\times I^{t}, $$
+donde hay un factor $\mathbf{S}^1$ para cada articulación de revolución, y cada $I_{j}$ da la configuración de la articulación telescopica j-ésima. Vamos a llamar a $\mathcal{J}$ el espacio de articulaciones del robot. 
+Podemos describir el espacio de posibles configuraciones de la ``mano" de un robot que se mueve en un plano de la siguiente manera. Fijando el sistema de coordenadas cartesianas en el plano, podemos representar las posiciones posibles de la "mano" por los puntos $(a, b)$ de una región $U \subseteq  \mathbf{R}^{2}$. Del mismo modo, podemos representar la orientación de la "mano", dando un vector unitario. Por lo tanto, las posibles orientaciones de mano son parametrizados por los vectores $u$ en $V = S^{1}$. 
+
+Vamos a llamar a $C = U \times V$  el espacio de configuración o el espacio operativo de la mano del robot.
+Cada conjunto de parámetros conjuntos posicionará la "mano" en un lugar determinado, con una orientación determinada, de forma única. Debido a esto, tenemos una función
+$$ f : \mathcal{J} \longrightarrow \mathcal{C}$$
+que codifica cómo las diferentes configuraciones de las articulaciones producen diferentes configuraciones de mano.
+
+Hay dos problemas básicos qué se podrían considerar en este punto ya que pueden ser descritos sucintamente en términos de la asignación $ f : \mathcal{J} \longrightarrow \mathcal{C}$ descrita anteriormente:
+
+\begin{itemize}
+	\item \underline{Problema de la cinemática directa:} ¿Podemos dar una descripción explícita o fórmula para f en función de la configuración de conjuntos (nuestros coordenadas en J) y las dimensiones de los segmentos del brazo?
+	
+	\item \underline{Problema de la cinemática inversa:} Dada $c \epsilon \mathcal{C}$, ¿podemos determinar una o todas las $j \epsilon \mathcal{J}$ tal que $f(j) = c$?
+\end{itemize}
+
+Si estudiásemos el primero veríamos que el problema se resuelve con relativa facilidad. La determinación de la posición y orientación de la "mano" a partir de la configuración del "brazo" es sobre todo una cuestión de ser sistemático en la descripción de las posiciones relativas de los segmentos a cada lado de una articulación. Por lo tanto, el problema directo es de interés principalmente como un preliminar para el problema inverso. 
+El inverso es algo más sutil ya que nuestras fórmulas explícitas no serán lineales si hay articulaciones de revolución presentes. Por lo tanto, tendremos que utilizar los resultados generales de los sistemas de ecuaciones polinómicas para resolver la ecuación $f(j) = c$
+
+Una característica de los sistemas no lineales de ecuaciones es que puede haber varias soluciones diferentes, incluso cuando todo el conjunto de soluciones es finito. Como cuestión práctica, la potencial no unicidad de las soluciones es a veces muy deseable. Por ejemplo, si nuestro robot en el mundo real va a trabajar en un espacio que contiene obstáculos físicos o barreras al movimiento en ciertas direcciones, puede darse el caso de que algunas de las soluciones corresponden a las posiciones que son no físicamente alcanzables.
+Para determinar si es posible llegar a una posición dada, puede ser que necesitemos calcular todas las soluciones, y luego ver cuales son factibles debido a las limitaciones del entorno en el que nuestro robot trabaja.
